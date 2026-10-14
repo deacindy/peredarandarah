@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab IPA Interaktif — Sistem Peredaran Darah</title>
+<style>
+:root{--ink:#19334a;--muted:#607487;--blue:#216b91;--sky:#e9f5fb;--coral:#ef806d;--cream:#fffaf2;--green:#327d67;--line:#d9e5ec;--white:#fff}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:#f4f8fb;color:var(--ink);line-height:1.55}
+header{background:linear-gradient(125deg,#153f5b,#267da0);color:white;padding:30px 20px 25px}
+.wrap{max-width:1100px;margin:auto}.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:.76rem;font-weight:800;opacity:.85}
+h1{font-size:clamp(1.8rem,4vw,3rem);line-height:1.1;margin:.45rem 0 .7rem;max-width:760px}
+header p{max-width:700px;margin:0;color:#e6f4fb}
+.hero-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.tag{border:1px solid #ffffff66;border-radius:99px;padding:5px 11px;font-size:.83rem}
+main{max-width:1100px;margin:22px auto;padding:0 16px 50px;display:grid;grid-template-columns:235px minmax(0,1fr);gap:20px}
+nav{align-self:start;position:sticky;top:12px;background:white;border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:0 8px 24px #19334a0b}
+nav strong{display:block;padding:4px 9px 10px}
+nav button{width:100%;text-align:left;background:transparent;border:0;border-radius:10px;padding:10px;color:var(--ink);cursor:pointer;font:inherit;margin:2px 0}
+nav button.active,nav button:hover{background:var(--sky);color:var(--blue);font-weight:700}
+.content{min-width:0}.panel{display:none;background:white;border:1px solid var(--line);border-radius:18px;padding:clamp(18px,3vw,30px);box-shadow:0 8px 24px #19334a08}.panel.active{display:block}
+.kicker{color:var(--blue);font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;font-weight:800}
+h2{font-size:1.65rem;line-height:1.2;margin:.3rem 0 1rem}h3{margin:1.2rem 0 .55rem;font-size:1.05rem}
+p{margin:.45rem 0 .8rem}.muted{color:var(--muted);font-size:.92rem}
+.callout{background:var(--sky);border-left:4px solid var(--blue);border-radius:10px;padding:13px 15px;margin:15px 0}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:14px;padding:15px;background:#fff}
+.blood{cursor:pointer;transition:.15s}.blood:hover,.blood:focus{transform:translateY(-2px);border-color:var(--blue);outline:2px solid #216b9122}
+.blood .emoji{font-size:2rem}.blood strong{display:block}.detail{min-height:68px}
+label{display:block;font-weight:700;font-size:.9rem;margin:10px 0 5px}
+input,textarea,select{width:100%;border:1px solid #c8d8e2;border-radius:9px;padding:10px 11px;font:inherit;background:white;color:var(--ink)}
+textarea{min-height:90px;resize:vertical}input:focus,textarea:focus,select:focus{outline:2px solid #83c4df;border-color:var(--blue)}
+button.primary,button.secondary,button.danger{border:0;border-radius:10px;padding:10px 15px;font:inherit;font-weight:750;cursor:pointer}
+button.primary{background:var(--blue);color:white}button.secondary{background:var(--sky);color:var(--blue)}button.danger{background:#fff0ed;color:#a94335}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.92rem}th,td{border:1px solid var(--line);padding:9px;text-align:left;vertical-align:top}th{background:#eff7fa}
+table input{min-width:85px}
+.organ-visual{background:linear-gradient(150deg,#f1f8fb,#fffaf2);border-radius:14px;padding:15px;text-align:center}
+.heart{font-size:4rem;line-height:1.2}.vessel{padding:12px;border-radius:10px;margin:7px 0;text-align:left}.artery{background:#fff0ee;border-left:5px solid #d95757}.vein{background:#eaf2ff;border-left:5px solid #507dc5}.capillary{background:#f2f8e9;border-left:5px solid #79a64b}
+.timer{font-size:2.5rem;font-weight:850;font-variant-numeric:tabular-nums;letter-spacing:.04em;text-align:center;margin:12px 0}.timer-status{text-align:center;color:var(--muted);min-height:24px}
+.stat{background:#f5fafc;border:1px solid var(--line);padding:13px;border-radius:12px}.stat span{display:block;color:var(--muted);font-size:.83rem}.stat strong{font-size:1.35rem}
+.flowmap{background:linear-gradient(145deg,#f4fafc,#fff8f3);border:1px solid var(--line);border-radius:16px;padding:16px;margin:16px 0}
+.flowroute{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:stretch}
+.flow-node{position:relative;text-align:center;border:1px solid var(--line);border-radius:12px;padding:13px 8px;background:white;min-height:94px}
+.flow-node .symbol{font-size:1.8rem;display:block}.flow-node strong{display:block;font-size:.9rem}.flow-node small{color:var(--muted)}
+.flow-node.active{border:2px solid var(--coral);background:#fff0ec;box-shadow:0 0 0 4px #ef806d20}
+.flow-note{padding:12px;background:white;border-radius:10px;margin-top:12px;min-height:55px}
+.quiz-option{display:block;text-align:left;width:100%;margin:7px 0;border:1px solid var(--line);background:white;border-radius:10px;padding:11px;cursor:pointer;font:inherit;color:var(--ink)}
+.quiz-option:hover{border-color:var(--blue);background:var(--sky)}.quiz-option.correct{border-color:#327d67;background:#edf8f2}.quiz-option.wrong{border-color:#d95757;background:#fff0ed}
+.feedback{padding:11px;border-radius:10px;margin-top:10px;min-height:44px;background:#f4f8fb}
+.progress{height:7px;background:#dce9ef;border-radius:99px;overflow:hidden;margin:10px 0}.progress div{height:100%;background:var(--coral);width:0;transition:width .2s}
+footer{max-width:1100px;margin:-25px auto 30px;padding:0 16px;color:var(--muted);font-size:.82rem}
+@media(max-width:760px){main{grid-template-columns:1fr}nav{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px}nav strong{grid-column:1/-1}.grid2,.grid3{grid-template-columns:1fr 1fr}.panel{padding:18px}}
+@media(max-width:470px){.grid2,.grid3{grid-template-columns:1fr}nav{grid-template-columns:1fr 1fr}th,td{padding:6px;font-size:.82rem}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="eyebrow">Laboratorium IPA • Kelas VII/VIII</div>
+<h1>Sistem Peredaran Darah Manusia</h1>
+<p>Jelajahi komponen darah, kenali organ peredaran darah, lalu lakukan praktikum sederhana untuk mengetahui hubungan aktivitas fisik dengan denyut nadi.</p>
+<div class="hero-tags"><span class="tag">Belajar sambil mencoba</span><span class="tag">Kerja kelompok</span><span class="tag">Catat hasil pengamatan</span></div>
+</div></header>
+<main>
+<nav aria-label="Navigasi kegiatan">
+<strong>📘 Alur kegiatan</strong>
+<button class="active" data-page="awal">🏠 Petunjuk & Tujuan</button>
+<button data-page="darah">🩸 1. Komponen Darah</button>
+<button data-page="organ">❤️ 2. Organ Peredaran</button>
+<button data-page="praktik">⏱️ 3. Praktik Denyut Nadi</button>
+<button data-page="kuis">🧠 Kuis Pemahaman</button>
+<button data-page="kesimpulan">📝 Kesimpulan</button>
+<button data-page="refleksi">🌱 Refleksi</button>
+<button data-page="guru">📥 Simpan & Periksa</button>
+<div class="progress"><div id="progressbar"></div></div><small class="muted" id="progressText">0 dari 6 bagian terisi</small>
+</nav>
+<div class="content">
+<section class="panel active" id="awal">
+<div class="kicker">Mulai di sini</div><h2>Selamat datang di laboratorium interaktif!</h2>
+<p>Kerjakan kegiatan bersama kelompokmu. Diskusikan jawaban, catat hasil pengamatan, dan gunakan bukti dari praktikum saat membuat kesimpulan.</p>
+<div class="callout"><strong>Tujuan pembelajaran</strong><ul><li>Mengidentifikasi komponen penyusun darah dan fungsinya.</li><li>Menjelaskan organ peredaran darah manusia beserta fungsinya.</li><li>Menganalisis hubungan aktivitas fisik dengan denyut nadi atau kerja jantung.</li></ul></div>
+<div class="grid2">
+<div><label for="kelompok">Nama kelompok</label><input id="kelompok" placeholder="Contoh: Kelompok 2" data-save></div>
+<div><label for="kelas">Kelas</label><input id="kelas" placeholder="Contoh: VIII B" data-save></div>
+<div><label for="anggota">Nama anggota kelompok</label><textarea id="anggota" placeholder="Tuliskan nama anggota kelompok" data-save></textarea></div>
+<div><label for="tanggal">Tanggal kegiatan</label><input id="tanggal" type="date" data-save></div>
+</div>
+<h3>Kesepakatan kerja kelompok</h3>
+<p class="muted">Bagi peran: pembaca petunjuk, pencatat data, pengukur waktu, dan penyaji hasil. Pastikan semua anggota mendapat kesempatan berpendapat.</p>
+<div class="actions"><button class="primary" data-go="darah">Mulai kegiatan →</button></div>
+</section>
+
+<section class="panel" id="darah">
+<div class="kicker">Kegiatan 1</div><h2>Mengidentifikasi penyusun darah</h2>
+<p>Pilih setiap komponen darah untuk membaca petunjuk, lalu lengkapi tabel fungsi dengan bahasamu sendiri.</p>
+<div class="grid2">
+<button class="card blood" data-blood="plasma"><span class="emoji">🟡</span><strong>Plasma darah</strong><span class="muted">Bagian cair darah</span></button>
+<button class="card blood" data-blood="eritrosit"><span class="emoji">🔴</span><strong>Sel darah merah</strong><span class="muted">Eritrosit</span></button>
+<button class="card blood" data-blood="leukosit"><span class="emoji">⚪</span><strong>Sel darah putih</strong><span class="muted">Leukosit</span></button>
+<button class="card blood" data-blood="trombosit"><span class="emoji">🟣</span><strong>Trombosit</strong><span class="muted">Keping darah</span></button>
+</div>
+<div class="callout detail" id="bloodDetail" aria-live="polite">Pilih salah satu komponen di atas untuk melihat fungsi utamanya.</div>
+<table><thead><tr><th style="width:30%">Komponen</th><th>Fungsi (diisi murid)</th></tr></thead><tbody>
+<tr><td>Plasma darah</td><td><textarea aria-label="Fungsi plasma darah" data-save placeholder="Tuliskan fungsi plasma darah..."></textarea></td></tr>
+<tr><td>Sel darah merah (eritrosit)</td><td><textarea aria-label="Fungsi eritrosit" data-save placeholder="Tuliskan fungsi eritrosit..."></textarea></td></tr>
+<tr><td>Sel darah putih (leukosit)</td><td><textarea aria-label="Fungsi leukosit" data-save placeholder="Tuliskan fungsi leukosit..."></textarea></td></tr>
+<tr><td>Trombosit</td><td><textarea aria-label="Fungsi trombosit" data-save placeholder="Tuliskan fungsi trombosit..."></textarea></td></tr>
+</tbody></table>
+<div class="actions"><button class="secondary" data-go="awal">← Sebelumnya</button><button class="primary" data-go="organ">Lanjut ke kegiatan 2 →</button></div>
+</section>
+
+<section class="panel" id="organ">
+<div class="kicker">Kegiatan 2</div><h2>Mengenal organ peredaran darah</h2>
+<div class="grid2">
+<div class="organ-visual"><div class="heart">❤️</div><strong>Jantung</strong><p class="muted">Memompa darah agar mengalir ke paru-paru dan seluruh tubuh.</p></div>
+<div class="card"><strong>Pembuluh darah</strong><p class="muted">Jalur yang dilalui darah untuk membawa oksigen, zat makanan, dan sisa metabolisme.</p><div class="vessel artery"><strong>Arteri</strong><br>Umumnya membawa darah keluar dari jantung.</div><div class="vessel vein"><strong>Vena</strong><br>Umumnya membawa darah menuju jantung.</div><div class="vessel capillary"><strong>Kapiler</strong><br>Pembuluh sangat kecil, tempat pertukaran zat dengan jaringan.</div></div>
+</div>
+<label for="organUtama">1. Sebutkan organ utama sistem peredaran darah manusia!</label><textarea id="organUtama" data-save placeholder="Tuliskan jawaban kelompok..."></textarea>
+<label for="bedaPembuluh">2. Jelaskan perbedaan pembuluh arteri, vena, dan kapiler!</label><textarea id="bedaPembuluh" data-save placeholder="Bandingkan arah aliran dan ciri/fungsinya..."></textarea>
+<div class="callout"><strong>Diskusikan:</strong> Mengapa tubuh membutuhkan jantung dan pembuluh darah yang bekerja bersama?</div>
+<label for="diskusiOrgan">Catatan hasil diskusi kelompok</label><textarea id="diskusiOrgan" data-save placeholder="Tuliskan gagasan kelompok..."></textarea>
+<h3>Simulasi aliran darah</h3>
+<p class="muted">Tekan tombol untuk mengikuti jalur darah. Perhatikan bahwa darah mengalir dari jantung ke paru-paru untuk pertukaran gas, kembali ke jantung, lalu dipompa ke seluruh tubuh.</p>
+<div class="flowmap">
+<div class="flowroute" id="flowroute">
+<div class="flow-node" data-step="0"><span class="symbol">❤️</span><strong>Jantung kanan</strong><small>Menuju paru-paru</small></div>
+<div class="flow-node" data-step="1"><span class="symbol">🫁</span><strong>Paru-paru</strong><small>Mengambil oksigen</small></div>
+<div class="flow-node" data-step="2"><span class="symbol">❤️</span><strong>Jantung kiri</strong><small>Memompa ke tubuh</small></div>
+<div class="flow-node" data-step="3"><span class="symbol">🧍</span><strong>Seluruh tubuh</strong><small>Oksigen digunakan</small></div>
+<div class="flow-node" data-step="4"><span class="symbol">🔵</span><strong>Kembali ke jantung</strong><small>Darah menuju sisi kanan</small></div>
+<div class="flow-node" data-step="5"><span class="symbol">🔁</span><strong>Siklus berulang</strong><small>Darah terus bersirkulasi</small></div>
+</div>
+<div class="actions"><button class="primary" id="flowNext">Mulai simulasi →</button><button class="secondary" id="flowReset">Ulangi dari awal</button></div>
+<div class="flow-note" id="flowNote" aria-live="polite">Pilih “Mulai simulasi” untuk melihat urutan peredaran darah.</div>
+</div>
+<div class="actions"><button class="secondary" data-go="darah">← Sebelumnya</button><button class="primary" data-go="praktik">Lanjut ke praktikum →</button></div>
+</section>
+
+<section class="panel" id="praktik">
+<div class="kicker">Kegiatan 3 • Praktikum</div><h2>Mengukur denyut nadi</h2>
+<p>Ukur denyut nadi di pergelangan tangan. Hitung selama 15 detik saat istirahat, lalu kalikan 4. Lakukan aktivitas fisik ringan selama 30 detik (misalnya jalan di tempat atau lompat ringan), kemudian ukur lagi selama 15 detik dan kalikan 4.</p>
+<div class="callout">Utamakan keselamatan. Lakukan aktivitas sesuai kemampuan, berhenti jika pusing, nyeri, atau tidak nyaman, dan ikuti arahan guru. Jangan memaksakan diri.</div>
+<h3>Timer praktikum</h3>
+<div class="grid2">
+<div class="card"><strong>Ukur denyut nadi</strong><div class="timer" id="timerRead">00:15</div><div class="timer-status" id="timerStatus">Siap mengukur selama 15 detik</div><div class="actions"><button class="primary" id="start15">Mulai 15 detik</button><button class="secondary" id="resetTimer">Atur ulang</button></div></div>
+<div class="card"><strong>Aktivitas fisik ringan</strong><div class="timer" id="activityRead">00:30</div><div class="timer-status" id="activityStatus">Siap bergerak selama 30 detik</div><div class="actions"><button class="primary" id="start30">Mulai 30 detik</button><button class="secondary" id="resetActivity">Atur ulang</button></div></div>
+</div>
+<h3>Catat data anggota kelompok</h3>
+<p class="muted">Masukkan jumlah denyut yang terhitung selama 15 detik. Web akan mengalikannya dengan 4 untuk memperkirakan denyut per menit (bpm).</p>
+<div style="overflow-x:auto"><table id="pulseTable"><thead><tr><th>Nama anggota</th><th>Denyut saat istirahat (15 dtk)</th><th>Per menit (bpm)</th><th>Setelah aktivitas (15 dtk)</th><th>Per menit (bpm)</th><th>Perubahan (bpm)</th></tr></thead><tbody id="pulseBody"></tbody></table></div>
+<div class="actions"><button class="secondary" id="addRow">＋ Tambah anggota</button><button class="secondary" id="calcAll">Hitung ulang data</button></div>
+<div class="grid3" style="margin-top:14px"><div class="stat"><span>Rata-rata saat istirahat</span><strong id="avgRest">— bpm</strong></div><div class="stat"><span>Rata-rata setelah aktivitas</span><strong id="avgAfter">— bpm</strong></div><div class="stat"><span>Rata-rata perubahan</span><strong id="avgChange">— bpm</strong></div></div>
+<div class="card" style="margin-top:14px"><strong>Perbandingan denyut nadi kelompok</strong><div id="chart" style="min-height:90px;margin-top:12px"></div><p class="muted">Grafik sederhana diperbarui berdasarkan data yang kamu masukkan.</p></div>
+<label for="observasi">Apa pola yang terlihat dari data kelompokmu?</label><textarea id="observasi" data-save placeholder="Contoh: denyut nadi setelah aktivitas cenderung..."></textarea>
+<div class="actions"><button class="secondary" data-go="organ">← Sebelumnya</button><button class="primary" data-go="kesimpulan">Lanjut ke kesimpulan →</button></div>
+</section>
+
+
+<section class="panel" id="kuis">
+<div class="kicker">Cek pemahaman</div><h2>Kuis singkat sistem peredaran darah</h2>
+<p>Pilih satu jawaban terbaik untuk setiap pertanyaan. Baca umpan balik setelah menjawab, lalu diskusikan alasanmu dengan kelompok.</p>
+<div id="quizContainer"></div>
+<div class="stat" style="margin-top:14px"><span>Skor sementara</span><strong id="quizScore">0/5</strong><p class="muted" id="quizSummary">Jawab semua pertanyaan untuk melihat hasil.</p></div>
+<div class="actions"><button class="secondary" id="quizRetry">Ulangi kuis</button><button class="primary" data-go="kesimpulan">Lanjut ke kesimpulan →</button></div>
+</section>
+
+<section class="panel" id="kesimpulan">
+<div class="kicker">Bagian E</div><h2>Menyusun kesimpulan</h2>
+<label for="perubahan">Apa yang terjadi pada denyut nadi setelah beraktivitas? Mengapa hal tersebut dapat terjadi?</label><textarea id="perubahan" data-save placeholder="Gunakan hasil pengukuran kelompok sebagai bukti..."></textarea>
+<label for="kesimpulanAkhir">Apa kesimpulan dari praktik yang telah kalian lakukan?</label><textarea id="kesimpulanAkhir" data-save placeholder="Rangkum hubungan aktivitas fisik dengan denyut nadi dan kerja jantung..."></textarea>
+<div class="callout"><strong>Periksa kembali:</strong> Apakah kesimpulanmu sesuai dengan data? Apakah kamu sudah menjelaskan alasan, bukan hanya menyebutkan hasil?</div>
+<div class="actions"><button class="secondary" data-go="praktik">← Kembali ke data</button><button class="primary" data-go="refleksi">Lanjut ke refleksi →</button></div>
+</section>
+
+<section class="panel" id="refleksi">
+<div class="kicker">Bagian F</div><h2>Refleksi diri</h2>
+<label for="paham">Apa yang sudah saya pahami tentang sistem peredaran darah?</label><textarea id="paham" data-save placeholder="Hal baru yang saya pahami adalah..."></textarea>
+<label for="aksi">Apa langkah yang akan saya lakukan untuk menjaga kesehatan jantung saya?</label><textarea id="aksi" data-save placeholder="Kebiasaan sehat yang akan saya lakukan..."></textarea>
+<label for="kontribusi">Bagaimana kontribusi saya dalam kerja kelompok hari ini?</label><textarea id="kontribusi" data-save placeholder="Saya membantu kelompok dengan cara..."></textarea>
+<div class="actions"><button class="secondary" data-go="kesimpulan">← Sebelumnya</button><button class="primary" data-go="guru">Simpan dan tinjau →</button></div>
+</section>
+
+<section class="panel" id="guru">
+<div class="kicker">Dokumentasi belajar</div><h2>Simpan hasil dan tinjau jawaban</h2>
+<p>Isian disimpan otomatis di browser perangkat ini. Unduh berkas JSON untuk menyimpan seluruh jawaban dan data praktikum, atau unduh CSV untuk tabel denyut nadi.</p>
+<div class="grid2">
+<div class="card"><strong>📄 Hasil kerja kelompok</strong><p class="muted">Mencakup identitas, jawaban LKM, kesimpulan, dan refleksi.</p><button class="primary" id="downloadJson">Unduh hasil (JSON)</button></div>
+<div class="card"><strong>📊 Data praktikum</strong><p class="muted">Tabel pengukuran denyut nadi yang bisa dibuka di spreadsheet.</p><button class="primary" id="downloadCsv">Unduh tabel (CSV)</button></div>
+</div>
+<h3>Ringkasan jawaban untuk diperiksa guru</h3><div id="review" class="card muted">Isi kegiatan terlebih dahulu, lalu tekan “Perbarui ringkasan”.</div>
+<div class="actions"><button class="secondary" id="refreshReview">Perbarui ringkasan</button><button class="danger" id="clearData">Hapus semua isian</button></div>
+<p class="muted" style="margin-top:16px">Catatan: penyimpanan hanya ada pada browser/perangkat yang digunakan. Berkas yang diunduh dapat dikirimkan kepada guru. Web ini belum mengirim jawaban otomatis ke perangkat guru.</p>
+<div class="actions"><button class="secondary" data-go="refleksi">← Kembali ke refleksi</button><button class="primary" data-go="awal">Kembali ke awal ↑</button></div>
+</section>
+</div>
+</main>
+<footer>Media belajar interaktif untuk mendampingi LKM “Sistem Peredaran Darah pada Manusia”. Gunakan hasil pengamatan nyata kelompok saat menjawab pertanyaan.</footer>
+<script>
+const pages=[...document.querySelectorAll('.panel')], navBtns=[...document.querySelectorAll('nav button[data-page]')];
+function go(id){pages.forEach(p=>p.classList.toggle('active',p.id===id));navBtns.forEach(b=>b.classList.toggle('active',b.dataset.page===id));window.scrollTo({top:0,behavior:'smooth'});updateProgress();if(id==='guru')refreshReview();}
+navBtns.forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+const bloodInfo={
+plasma:'Plasma darah adalah bagian cair darah. Fungsinya mengangkut berbagai zat, misalnya nutrisi, hormon, dan sisa metabolisme, ke seluruh tubuh.',
+eritrosit:'Sel darah merah mengandung hemoglobin yang mengikat dan mengangkut oksigen dari paru-paru ke jaringan tubuh.',
+leukosit:'Sel darah putih membantu pertahanan tubuh dengan melawan kuman atau benda asing penyebab penyakit.',
+trombosit:'Trombosit membantu proses pembekuan darah sehingga perdarahan dapat dihentikan saat pembuluh darah terluka.'
+};
+document.querySelectorAll('[data-blood]').forEach(b=>b.addEventListener('click',()=>{document.getElementById('bloodDetail').textContent=bloodInfo[b.dataset.blood];}));
+const storageKey='lab-peredaran-darah-v1';
+function fields(){return [...document.querySelectorAll('[data-save],input[data-save],textarea[data-save]')];}
+function save(){let d={};fields().forEach((el,i)=>{let k=el.id||el.getAttribute('aria-label')||'field'+i;d[k]=el.value});d.pulse=getPulseData();try{localStorage.setItem(storageKey,JSON.stringify(d));}catch(e){}updateProgress();}
+function load(){try{let d=JSON.parse(localStorage.getItem(storageKey)||'{}');fields().forEach((el,i)=>{let k=el.id||el.getAttribute('aria-label')||'field'+i;if(d[k]!==undefined)el.value=d[k]});if(d.pulse?.length){document.getElementById('pulseBody').innerHTML='';d.pulse.forEach(r=>addRow(r));}else{for(let i=0;i<3;i++)addRow();}}catch(e){for(let i=0;i<3;i++)addRow();}}
+fields().forEach(el=>el.addEventListener('input',save));
+function addRow(data={}){const tr=document.createElement('tr');tr.innerHTML='<td><input aria-label="Nama anggota" placeholder="Nama" value=""></td><td><input aria-label="Istirahat 15 detik" type="number" min="0" max="100" placeholder="0"></td><td class="restBpm">—</td><td><input aria-label="Aktivitas 15 detik" type="number" min="0" max="100" placeholder="0"></td><td class="afterBpm">—</td><td class="changeBpm">—</td>';let ins=tr.querySelectorAll('input');ins[0].value=data.name||'';ins[1].value=data.restRaw??'';ins[3].value=data.afterRaw??'';ins.forEach(i=>i.addEventListener('input',()=>{calcAll();save()}));document.getElementById('pulseBody').appendChild(tr);calcAll();}
+function getPulseData(){return [...document.querySelectorAll('#pulseBody tr')].map(tr=>{let i=tr.querySelectorAll('input');return {name:i[0].value,restRaw:i[1].value===''?'':Number(i[1].value),afterRaw:i[3].value===''?'':Number(i[3].value),restBpm:i[1].value===''?null:Number(i[1].value)*4,afterBpm:i[3].value===''?null:Number(i[3].value)*4}})}
+function calcAll(){let rows=[...document.querySelectorAll('#pulseBody tr')],rs=[],as=[],cs=[];rows.forEach(tr=>{let ins=tr.querySelectorAll('input'),r=ins[1].value===''?null:Number(ins[1].value)*4,a=ins[3].value===''?null:Number(ins[3].value)*4;tr.querySelector('.restBpm').textContent=r===null?'—':r;tr.querySelector('.afterBpm').textContent=a===null?'—':a;tr.querySelector('.changeBpm').textContent=r===null||a===null?'—':(a-r>0?'+':'')+(a-r);if(r!==null)rs.push(r);if(a!==null)as.push(a);if(r!==null&&a!==null)cs.push(a-r)});const avg=a=>a.length?(a.reduce((x,y)=>x+y,0)/a.length).toFixed(1):'—';document.getElementById('avgRest').textContent=avg(rs)+' bpm';document.getElementById('avgAfter').textContent=avg(as)+' bpm';document.getElementById('avgChange').textContent=avg(cs)+' bpm';drawChart(rs,as);save();}
+function drawChart(rs,as){const max=Math.max(1,...rs,...as);let out='';[ {name:'Istirahat',arr:rs,color:'#216b91'},{name:'Setelah aktivitas',arr:as,color:'#ef806d'}].forEach(s=>{let avg=s.arr.length?s.arr.reduce((a,b)=>a+b,0)/s.arr.length:0;out+=`<div style="display:grid;grid-template-columns:125px 1fr 65px;gap:8px;align-items:center;margin:9px 0"><span style="font-size:.86rem">${s.name}</span><div style="height:18px;background:#edf3f6;border-radius:5px;overflow:hidden"><div style="height:100%;width:${avg/max*100}%;background:${s.color};border-radius:5px"></div></div><strong>${s.arr.length?avg.toFixed(1):'—'} bpm</strong></div>`});document.getElementById('chart').innerHTML=out;}
+document.getElementById('addRow').addEventListener('click',()=>{addRow();save()});document.getElementById('calcAll').addEventListener('click',calcAll);
+let timerInterval=null,activityInterval=null;
+function runTimer(seconds,readId,statusId,btnId,which){if(which==='read'&&timerInterval)clearInterval(timerInterval);if(which==='activity'&&activityInterval)clearInterval(activityInterval);let remain=seconds;const read=document.getElementById(readId),status=document.getElementById(statusId),btn=document.getElementById(btnId);btn.disabled=true;btn.textContent='Sedang berjalan…';function show(){read.textContent='00:'+String(remain).padStart(2,'0')}show();status.textContent='Waktu berjalan. Fokus pada kegiatan.';const int=setInterval(()=>{remain--;show();if(remain<=0){clearInterval(int);status.textContent='Waktu selesai! Catat hasil pengamatan.';btn.disabled=false;btn.textContent='Ulangi timer';if(which==='read')timerInterval=null;else activityInterval=null;}} ,1000);if(which==='read')timerInterval=int;else activityInterval=int;}
+document.getElementById('start15').addEventListener('click',()=>runTimer(15,'timerRead','timerStatus','start15','read'));
+document.getElementById('start30').addEventListener('click',()=>runTimer(30,'activityRead','activityStatus','start30','activity'));
+document.getElementById('resetTimer').addEventListener('click',()=>{clearInterval(timerInterval);timerInterval=null;document.getElementById('timerRead').textContent='00:15';document.getElementById('timerStatus').textContent='Siap mengukur selama 15 detik';document.getElementById('start15').disabled=false;document.getElementById('start15').textContent='Mulai 15 detik';});
+document.getElementById('resetActivity').addEventListener('click',()=>{clearInterval(activityInterval);activityInterval=null;document.getElementById('activityRead').textContent='00:30';document.getElementById('activityStatus').textContent='Siap bergerak selama 30 detik';document.getElementById('start30').disabled=false;document.getElementById('start30').textContent='Mulai 30 detik';});
+function updateProgress(){let filled=fields().filter(el=>el.value.trim()).length;let total=fields().length;document.getElementById('progressbar').style.width=(total?filled/total*100:0)+'%';document.getElementById('progressText').textContent=filled+' isian terisi';}
+function download(name,content,type){const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);}
+document.getElementById('downloadJson').addEventListener('click',()=>{let d={identitas:{kelompok:document.getElementById('kelompok').value,kelas:document.getElementById('kelas').value,anggota:document.getElementById('anggota').value,tanggal:document.getElementById('tanggal').value},jawaban:{},dataPraktikum:getPulseData(),waktuEkspor:new Date().toISOString()};fields().forEach((el,i)=>{d.jawaban[el.id||el.getAttribute('aria-label')||'field'+i]=el.value});download('hasil-LKM-peredaran-darah.json',JSON.stringify(d,null,2),'application/json');});
+document.getElementById('downloadCsv').addEventListener('click',()=>{let rows=[['Nama anggota','Istirahat 15 detik','Istirahat bpm','Setelah aktivitas 15 detik','Setelah aktivitas bpm','Perubahan bpm'],...getPulseData().map(r=>[r.name,r.restRaw,r.restBpm,r.afterRaw,r.afterBpm,r.restBpm==null||r.afterBpm==null?'':r.afterBpm-r.restBpm])];let csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n');download('data-denyut-nadi.csv','\ufeff'+csv,'text/csv;charset=utf-8;');});
+function refreshReview(){let map=[['Nama kelompok','kelompok'],['Komponen darah: plasma','Fungsi plasma darah'],['Komponen darah: eritrosit','Fungsi eritrosit'],['Komponen darah: leukosit','Fungsi leukosit'],['Komponen darah: trombosit','Fungsi trombosit'],['Organ utama','organUtama'],['Perbedaan pembuluh','bedaPembuluh'],['Pola data denyut nadi','observasi'],['Analisis perubahan denyut nadi','perubahan'],['Kesimpulan praktikum','kesimpulanAkhir'],['Refleksi pemahaman','paham'],['Rencana menjaga jantung','aksi']];let out='<div style="display:grid;gap:12px">';map.forEach(([label,id])=>{let el=document.getElementById(id)||document.querySelector(`[aria-label="${id}"]`);let val=el?el.value.trim():'';out+=`<div><strong>${label}</strong><p style="white-space:pre-wrap;margin:3px 0">${escapeHtml(val||'Belum diisi')}</p></div>`});out+='<strong>Data denyut nadi</strong><ul>';getPulseData().forEach(r=>out+=`<li>${escapeHtml(r.name||'Tanpa nama')}: istirahat ${r.restBpm??'—'} bpm; setelah aktivitas ${r.afterBpm??'—'} bpm</li>`);out+='</ul></div>';document.getElementById('review').innerHTML=out;}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+document.getElementById('refreshReview').addEventListener('click',refreshReview);
+document.getElementById('clearData').addEventListener('click',()=>{if(confirm('Hapus semua jawaban yang tersimpan di browser ini?')){localStorage.removeItem(storageKey);fields().forEach(el=>el.value='');document.getElementById('pulseBody').innerHTML='';for(let i=0;i<3;i++)addRow();save();refreshReview();}});
+
+const flowSteps=[
+{title:'Jantung kanan → paru-paru',text:'Darah yang relatif rendah oksigen dipompa dari sisi kanan jantung menuju paru-paru melalui pembuluh arteri pulmonalis.'},
+{title:'Pertukaran gas di paru-paru',text:'Di kapiler paru-paru, karbon dioksida dilepaskan dan oksigen masuk ke dalam darah.'},
+{title:'Paru-paru → jantung kiri',text:'Darah yang kaya oksigen kembali ke sisi kiri jantung melalui vena pulmonalis.'},
+{title:'Jantung kiri → seluruh tubuh',text:'Sisi kiri jantung memompa darah kaya oksigen melalui aorta dan arteri ke berbagai jaringan tubuh.'},
+{title:'Pertukaran zat di jaringan',text:'Di kapiler jaringan, oksigen dan zat yang dibutuhkan sel berpindah dari darah ke jaringan; karbon dioksida masuk ke darah.'},
+{title:'Kembali ke jantung kanan',text:'Darah kembali melalui vena menuju sisi kanan jantung. Siklus ini berlangsung terus-menerus.'}
+];let flowIndex=-1;
+function showFlow(){document.querySelectorAll('.flow-node').forEach(n=>n.classList.remove('active'));let node=document.querySelector(`[data-step="${flowIndex}"]`);if(node)node.classList.add('active');document.getElementById('flowNote').innerHTML=flowIndex<0?'Pilih “Mulai simulasi” untuk melihat urutan peredaran darah.':`<strong>${flowSteps[flowIndex].title}</strong><br>${flowSteps[flowIndex].text}`;document.getElementById('flowNext').textContent=flowIndex<0?'Mulai simulasi →':flowIndex===5?'Ulangi siklus →':'Langkah berikutnya →';}
+document.getElementById('flowNext').addEventListener('click',()=>{flowIndex=(flowIndex+1)%flowSteps.length;showFlow();});document.getElementById('flowReset').addEventListener('click',()=>{flowIndex=-1;showFlow();});
+const quizQuestions=[
+{q:'Komponen darah yang mengangkut sebagian besar oksigen adalah…',opts:['Plasma darah','Eritrosit','Leukosit','Trombosit'],a:1,why:'Eritrosit mengandung hemoglobin yang mengikat dan mengangkut oksigen.'},
+{q:'Fungsi utama leukosit adalah…',opts:['Membekukan darah','Mengangkut oksigen','Membantu pertahanan tubuh','Memompa darah'],a:2,why:'Leukosit berperan dalam sistem pertahanan tubuh melawan penyebab penyakit.'},
+{q:'Pembuluh yang umumnya membawa darah keluar dari jantung disebut…',opts:['Vena','Kapiler','Arteri','Alveolus'],a:2,why:'Arteri membawa darah menjauhi jantung; arah aliran ini merupakan ciri utamanya.'},
+{q:'Mengapa denyut nadi biasanya meningkat setelah aktivitas fisik?',opts:['Tubuh membutuhkan lebih banyak oksigen dan distribusi zat','Darah berhenti mengalir','Jantung tidak lagi memompa','Jumlah tulang bertambah'],a:0,why:'Otot yang aktif membutuhkan lebih banyak oksigen dan zat makanan, sehingga kerja jantung meningkat.'},
+{q:'Tempat utama pertukaran zat antara darah dan jaringan adalah…',opts:['Aorta saja','Kapiler','Ruang jantung','Katup jantung'],a:1,why:'Dinding kapiler sangat tipis sehingga memungkinkan pertukaran gas, nutrisi, dan sisa metabolisme.'}
+];let quizAnswers={};
+function renderQuiz(){let root=document.getElementById('quizContainer');root.innerHTML='';quizQuestions.forEach((q,qi)=>{let card=document.createElement('div');card.className='card';card.style.margin='12px 0';let h=document.createElement('h3');h.textContent=(qi+1)+'. '+q.q;card.appendChild(h);q.opts.forEach((opt,oi)=>{let b=document.createElement('button');b.className='quiz-option';b.textContent=String.fromCharCode(65+oi)+'. '+opt;if(quizAnswers[qi]!==undefined){b.disabled=true;if(oi===q.a)b.classList.add('correct');else if(oi===quizAnswers[qi])b.classList.add('wrong');}b.addEventListener('click',()=>{quizAnswers[qi]=oi;renderQuiz();});card.appendChild(b)});if(quizAnswers[qi]!==undefined){let f=document.createElement('div');f.className='feedback';f.innerHTML=(quizAnswers[qi]===q.a?'✅ <strong>Benar.</strong> ':'💡 <strong>Belum tepat.</strong> ')+q.why;card.appendChild(f)}root.appendChild(card)});let answered=Object.keys(quizAnswers).length,score=quizQuestions.filter((q,i)=>quizAnswers[i]===q.a).length;document.getElementById('quizScore').textContent=score+'/'+quizQuestions.length;document.getElementById('quizSummary').textContent=answered===quizQuestions.length?'Kuis selesai. Diskusikan pertanyaan yang masih keliru.':`Sudah dijawab ${answered} dari ${quizQuestions.length} pertanyaan.`;}
+document.getElementById('quizRetry').addEventListener('click',()=>{quizAnswers={};renderQuiz();});renderQuiz();
+
+load();updateProgress();
+</script>
+</body>
+</html>
